@@ -8,6 +8,15 @@ It keeps the native ComfyUI 3D pipeline while exposing model-specific controls f
 
 > This is not a new model, a custom inference implementation, or a claim of universally optimal settings. It is a parameter-surfaced variant of the official workflow, intended as a practical starting point for comparison and experimentation.
 
+![Complete workflow overview](docs/images/workflow-overview.webp)
+
+<details>
+<summary>Detailed tuning controls</summary>
+
+![Pixal3D, TRELLIS.2 and shared tuning controls](docs/images/tuning-controls.webp)
+
+</details>
+
 ## Why this workflow exists
 
 The official template is a complete end-to-end reference workflow, but many tuning values are distributed across the graph. This variant collects the values that are useful during iteration into three control areas:
@@ -18,25 +27,45 @@ The official template is a complete end-to-end reference workflow, but many tuni
 
 This makes it possible to keep different presets for the two models and switch between them without rebuilding the graph.
 
-## Main features
+## Verified differences from the official template
 
-- Pixal3D / TRELLIS.2 selection with one Boolean control
-- Separate Structure, Shape, Upsample, and Texture CFG/step presets for each model
-- Separate Structure, Shape, and Texture seeds
-- Manual camera FOV override, with `0.0` falling back to MoGe estimation
-- Optional Shape Upscale bypass
-- Model-specific Remesh Project Back values
-- Exposed smoothing iteration count, decimation mode, and target face count
-- 4K texture baking, matching the official template default
-- Base Color, Roughness, Metallic, Normal, and Ambient Occlusion previews
-- Vertex-color preview branch
-- Standard GLB save path in addition to the advanced 3D save/preview nodes
-- Native ComfyUI nodes only; no third-party generation node pack is required
+The comparison below was made directly against the supplied official `3d_pixal3d_trellis2_image_to_model` JSON, not inferred from a screenshot.
+
+| Graph | Nodes | Groups | Links |
+| --- | ---: | ---: | ---: |
+| Official template | 66 | 12 | 100 |
+| This workflow | 121 | 15 | 169 |
+
+This variant adds or changes:
+
+- Three dedicated control groups: shared, Pixal3D, and TRELLIS.2
+- Per-model routing for Structure, Shape, Upsample, and Texture CFG/steps
+- Centralized Structure, Shape, and Texture seed controls
+- Manual FOV override, with `0.0` retaining the official MoGe-estimated path
+- Shape Upscale bypass routed to both Texture Stage and shape decoding
+- Per-model Remesh Smooth Iterations and Project Back values
+- Central controls for target face count and decimation placement mode
+- Externalized Normal Map Cage Distance at exact value `0.02`
+- Five additional `Render Mesh → Preview Image` checkpoints: sparse mesh, decoded shape, painted decoded shape, post-processed mesh, and vertex-color mesh
+- A standard `Save GLB` output in addition to the official Advanced 3D save path
+
+The following are inherited from the official template and are **not claimed as modifications**:
+
+- The native Pixal3D/TRELLIS.2 generation pipeline and original model-selection logic
+- Background removal, cropping, DINOv3 conditioning, and MoGe FOV estimation
+- Structure, Shape, Upsample, Texture, Remesh, Decimate, UV unwrap, and PBR baking stages
+- 4096 texture resolution
+- Base Color, Roughness, Metallic, Normal, and Ambient Occlusion baking/previews
+- The vertex-color branch and Advanced 3D preview/save nodes
+
+No third-party generation node pack is required.
 
 ## Files
 
 - `workflows/native_pixal3d_trellis2_tuning.json` — the workflow
 - `examples/input-reference.jpg` — the reference image used during testing
+- `docs/images/workflow-overview.webp` — full graph overview
+- `docs/images/tuning-controls.webp` — detailed control-panel crop
 - `CIVITAI.md` — ready-to-edit Civitai listing copy and publishing checklist
 - `CHANGELOG.md` — repository changes
 

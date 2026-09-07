@@ -8,6 +8,15 @@ ComfyUI公式の **Pixal3D & TRELLIS.2: Image to Model** テンプレートを�
 
 > 収録値は万能な最適値ではなく、比較・検証を始めるための実験的プリセットです。
 
+![ワークフロー全体](docs/images/workflow-overview.webp)
+
+<details>
+<summary>調整パネルの拡大画像</summary>
+
+![共通・Pixal3D・TRELLIS.2調整パネル](docs/images/tuning-controls.webp)
+
+</details>
+
 ## このワークフローの目的
 
 公式テンプレートは一連の3D生成を網羅していますが、反復調整する値はグラフ全体に分散しています。この派生版では、調整値を次の3領域へ集約しています。
@@ -18,25 +27,45 @@ ComfyUI公式の **Pixal3D & TRELLIS.2: Image to Model** テンプレートを�
 
 両モデルに別々の値を保持したまま、Model Booleanだけで比較できます。
 
-## 主な変更点
+## 公式テンプレートとの差分
 
-- `false = Pixal3D`、`true = TRELLIS.2`のモデル切替
-- モデル別のStructure／Shape／Upsample／Texture CFG・Steps
-- Structure／Shape／Texture別Seed
-- FOV手動指定とMoGe推定の切替（`0.0`でMoGe）
-- Shape Upscaleの任意バイパス
-- モデル別Remesh Project Back
-- Smooth Iterations、Decimate Mode、Target Face Countの操作
-- 公式デフォルトと同じ4096 Texture Bake
-- Base Color／Roughness／Metallic／Normal／AOのプレビュー
-- Vertex Colorによる軽量確認経路
-- Advanced 3D Saveに加えて通常のSave GLBを収録
-- 生成部分はComfyUI公式ノードのみ。サードパーティ製生成ノードパックは不要
+以下はスクリーンショットからの推測ではなく、提供された公式版`3d_pixal3d_trellis2_image_to_model` JSONとの機械比較結果です。
+
+| Graph | Nodes | Groups | Links |
+| --- | ---: | ---: | ---: |
+| 公式テンプレート | 66 | 12 | 100 |
+| 本ワークフロー | 121 | 15 | 169 |
+
+追加・変更したもの：
+
+- 共通／Pixal3D／TRELLIS.2の3つの操作グループ
+- Structure／Shape／Upsample／TextureのCFG・Stepsをモデル別に切り替える配線
+- Structure／Shape／Texture Seedの中央集約
+- `0.0`で公式のMoGe推定経路へ戻る手動FOV Override
+- Texture StageとShape Decodeの両方へ反映されるShape Upscale迂回
+- モデル別Remesh Smooth Iterations／Project Back
+- Target Face Count／Decimate Placement Modeの中央操作
+- Normal Map Cage Distance `0.02`の外部入力化
+- Sparse Mesh、Decoded Shape、Painted Decoded Shape、Post-processed Mesh、Vertex-color Meshの5地点に`Render Mesh → Preview Image`を追加
+- 公式Advanced 3D Saveとは別に通常版`Save GLB`を追加
+
+次の項目は公式から継承したもので、変更点としては扱いません。
+
+- Pixal3D／TRELLIS.2の公式ネイティブ生成処理と元のモデル切替ロジック
+- 背景除去、Crop、DINOv3 Conditioning、MoGe FOV推定
+- Structure、Shape、Upsample、Texture、Remesh、Decimate、UV Unwrap、PBR Bake
+- Texture Resolution 4096
+- Base Color、Roughness、Metallic、Normal、AOのBake／Preview
+- Vertex Color経路とAdvanced 3D Preview／Save
+
+サードパーティ製の生成ノードパックは必要ありません。
 
 ## ファイル構成
 
 - `workflows/native_pixal3d_trellis2_tuning.json`：配布ワークフロー
 - `examples/input-reference.jpg`：調整時に使用した入力画像
+- `docs/images/workflow-overview.webp`：ワークフロー全体図
+- `docs/images/tuning-controls.webp`：操作部分の拡大図
 - `CIVITAI.md`：Civitai掲載用の本文・タグ・投稿チェックリスト
 - `CHANGELOG.md`：変更履歴
 

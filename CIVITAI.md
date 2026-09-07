@@ -41,21 +41,20 @@ This workflow is best understood as a middle layer between:
 1. using the official template as a mostly fixed reference graph; and
 2. installing a large third-party 3D node pack for deeper experimental features.
 
-### What is exposed
+### Verified changes from the official JSON
 
-- One-switch Pixal3D / TRELLIS.2 selection
-- Per-model Structure, Shape, Upsample and Texture CFG
-- Per-model Structure, Shape, Upsample and Texture steps
-- Separate Structure, Shape and Texture seeds
+- Shared, Pixal3D and TRELLIS.2 control groups
+- Per-model routing for Structure, Shape, Upsample and Texture CFG/steps
+- Centralized Structure, Shape and Texture seeds
 - Manual camera FOV, with `0.0` selecting MoGe estimation
 - Optional Shape Upscale bypass
 - Per-model Remesh Project Back values
 - Remesh smoothing iterations
 - Decimation mode and target face count
-- 4096 texture baking, matching the official template default
-- Base Color, Roughness, Metallic, Normal and AO previews
-- Vertex-color preview
+- Five added Render Mesh checkpoints across the generation/post-processing pipeline
 - Standard GLB output alongside the advanced native 3D save path
+
+The native generation stages, 4096 texture resolution, PBR map baking/previews, vertex-color branch and Advanced 3D nodes already exist in the official workflow. They are retained, not claimed as additions.
 
 ### Included experimental presets
 
@@ -135,21 +134,20 @@ ComfyUI公式の **Pixal3D & TRELLIS.2: Image to Model** をベースに、モ�
 
 公式ノードだけで、調整可能性を一段増やすことを目的にしています。
 
-### 追加・整理した操作項目
+### 公式JSONとの比較で確認した変更点
 
-- Bool一つによるPixal3D／TRELLIS.2切替
-- 両モデル別のStructure／Shape／Upsample／Texture CFG
-- 両モデル別の各Stage Steps
-- Structure／Shape／Texture別Seed
+- 共通／Pixal3D／TRELLIS.2の操作グループ
+- Structure／Shape／Upsample／TextureのCFG・Stepsをモデル別に切り替える配線
+- Structure／Shape／Texture Seedの中央集約
 - 手動FOVとMoGe推定の切替
 - Shape Upscaleの迂回
 - モデル別Remesh Project Back
 - Remesh Smooth Iterations
 - Decimate Mode／Target Face Count
-- 公式デフォルトと同じ4096 Texture Bake
-- Base Color／Roughness／Metallic／Normal／AOプレビュー
-- Vertex Color Preview
+- 生成・後処理の5地点にRender Mesh Previewを追加
 - Advanced Saveに加え、通常版Save GLB
+
+公式ネイティブ生成Stage、4096 Texture、PBR MapのBake／Preview、Vertex Color経路、Advanced 3Dノードは公式版にも存在します。このフローでも維持していますが、追加機能としては扱いません。
 
 ### 初期値
 
@@ -253,7 +251,7 @@ Version notes:
 - Added manual/MoGe FOV switching
 - Added Shape Upscale bypass
 - Exposed remesh, smoothing, decimation and face-count controls
-- Added map/render previews and standard GLB saving
+- Added five Render Mesh checkpoints and standard GLB saving
 - Preserved the official 4096 texture default and 0.02 normal-map cage distance
 ```
 
@@ -271,4 +269,3 @@ Version notes:
 - [ ] Link and credit the official ComfyUI workflow
 - [ ] Do not enable commercial permissions solely because this repository uses MIT; check model licenses separately
 - [ ] Add VRAM/time figures only after measuring them
-
