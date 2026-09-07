@@ -1,0 +1,8 @@
+.DS_Store
+Thumbs.db
+*.glb
+*.fbx
+*.obj
+*.mtl
+output/
+

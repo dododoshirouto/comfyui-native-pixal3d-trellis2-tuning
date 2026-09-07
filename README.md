@@ -36,7 +36,7 @@ This makes it possible to keep different presets for the two models and switch b
 ## Files
 
 - `workflows/native_pixal3d_trellis2_tuning.json` — the workflow
-- `examples/input-reference.png` — the reference image used during testing
+- `examples/input-reference.jpg` — the reference image used during testing
 - `CIVITAI.md` — ready-to-edit Civitai listing copy and publishing checklist
 - `CHANGELOG.md` — repository changes
 
@@ -166,4 +166,3 @@ Based on the official ComfyUI workflow template:
 The upstream workflow template repository is MIT licensed. This repository preserves attribution and documents the modifications. Model weights and upstream projects retain their own licenses; review them separately before commercial use or redistribution.
 
 Workflow modifications and documentation are released under the [MIT License](LICENSE).
-
