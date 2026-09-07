@@ -34,7 +34,7 @@ ComfyUI公式の **Pixal3D & TRELLIS.2: Image to Model** テンプレートを�
 | Graph | Nodes | Groups | Links |
 | --- | ---: | ---: | ---: |
 | 公式テンプレート | 66 | 12 | 100 |
-| 本ワークフロー | 121 | 15 | 169 |
+| 本ワークフロー | 122 | 15 | 169 |
 
 追加・変更したもの：
 
@@ -47,7 +47,7 @@ ComfyUI公式の **Pixal3D & TRELLIS.2: Image to Model** テンプレートを�
 - Target Face Count／Decimate Placement Modeの中央操作
 - Normal Map Cage Distance `0.02`の外部入力化
 - Sparse Mesh、Decoded Shape、Painted Decoded Shape、Post-processed Mesh、Vertex-color Meshの5地点に`Render Mesh → Preview Image`を追加
-- 公式Advanced 3D Saveとは別に通常版`Save GLB`を追加
+- 動作しないAdvanced 3D Preview／Saveは残したままBypassし、実行経路を`Render Mesh → Preview Image`と通常版`Save GLB`へ置換
 
 次の項目は公式から継承したもので、変更点としては扱いません。
 
@@ -60,12 +60,42 @@ ComfyUI公式の **Pixal3D & TRELLIS.2: Image to Model** テンプレートを�
 
 サードパーティ製の生成ノードパックは必要ありません。
 
+## Preview互換経路
+
+動作確認環境のComfyUI `0.34.0`／Frontend `1.51.10`では、公式テンプレートのAdvanced 3Dノードが必須入力`viewport_state`不足で停止しました。このフローでは次の構成に変更しています。
+
+1. 公式の`3Dプレビュー（詳細）`2個と`3D保存（詳細）`は比較・将来互換のため残す。
+2. その3ノードを**Bypass**し、実行を妨げないようにする。
+3. 公式ネイティブの`Render Mesh → 画像プレビュー`で2D確認する。
+4. 実際の出力経路には通常版`Save GLB`を使う。
+
+これはバージョン互換のための代替経路であり、2D Render PreviewがAdvanced 3D Previewのインタラクティブ機能を完全に置換するという意味ではありません。
+
+![互換Preview・GLB保存・Texture Map](docs/images/final-preview-and-maps.webp)
+
+<details>
+<summary>Structure・Shape・Texture StageのPreview</summary>
+
+![生成途中のRender Preview](docs/images/stage-previews.webp)
+
+</details>
+
+<details>
+<summary>GLB生成例（性的示唆を含むアニメキャラクター）</summary>
+
+![生成した3Dモデル例](docs/images/example-output.webp)
+
+</details>
+
 ## ファイル構成
 
 - `workflows/native_pixal3d_trellis2_tuning.json`：配布ワークフロー
 - `examples/input-reference.jpg`：調整時に使用した入力画像
 - `docs/images/workflow-overview.webp`：ワークフロー全体図
 - `docs/images/tuning-controls.webp`：操作部分の拡大図
+- `docs/images/final-preview-and-maps.webp`：互換Preview／保存経路とTexture Map
+- `docs/images/stage-previews.webp`：生成途中のPreview
+- `docs/images/example-output.webp`：3D生成結果例
 - `CIVITAI.md`：Civitai掲載用の本文・タグ・投稿チェックリスト
 - `CHANGELOG.md`：変更履歴
 
@@ -173,7 +203,7 @@ Texture Stageへ渡すShapeと、Mesh Decode経路の両方を迂回させます
 
 ### 「3Dプレビュー（詳細）に必須入力 viewport_state がありません」
 
-ComfyUI本体とFrontendを更新してください。古い状態で保存されたAdvanced Previewが残る場合は、現在のFrontend上でノードを作り直すか、通常のRender Previewとこのフローに追加した`Save GLB`を利用してください。
+公式AdvancedノードはBypass状態で残しています。このフローで有効になっている`Render Mesh → 画像プレビュー`と`Save GLB`を利用してください。別バージョンではAdvancedノードの再作成で直る可能性がありますが、ここに記載した環境では未確認です。
 
 ### ノードが見つからない
 

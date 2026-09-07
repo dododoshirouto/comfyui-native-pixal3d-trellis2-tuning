@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.2] - 2026-09-07
+
+- Replaced the mistakenly supplied workflow with the corrected 122-node JSON.
+- Corrected the decoded-shape Render Mesh/Preview Image connection.
+- Documented the tested-version preview compatibility path: Advanced 3D nodes retained in Bypass mode, active previews rendered to images, and export handled by Save GLB.
+- Added screenshots for stage previews, final preview/map inspection, and an example output.
+
 ## [0.1.1] - 2026-09-07
 
 - Updated the workflow to the 121-node revision with five additional render-preview checkpoints.

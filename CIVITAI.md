@@ -52,7 +52,7 @@ This workflow is best understood as a middle layer between:
 - Remesh smoothing iterations
 - Decimation mode and target face count
 - Five added Render Mesh checkpoints across the generation/post-processing pipeline
-- Standard GLB output alongside the advanced native 3D save path
+- Advanced 3D Preview/Save retained in Bypass mode, with active preview/export moved to `Render Mesh → Preview Image` and standard `Save GLB` for compatibility with the tested frontend
 
 The native generation stages, 4096 texture resolution, PBR map baking/previews, vertex-color branch and Advanced 3D nodes already exist in the official workflow. They are retained, not claimed as additions.
 
@@ -73,6 +73,7 @@ These values are starting points from limited testing. They are not presented as
 - **Normal Map Cage Distance uses a Math Expression node intentionally.** The current Primitive Float widget rounds the value to one decimal place, so Math Expression is used to preserve `0.02`.
 - **FOV `0.0` means automatic.** Any other value overrides MoGe's estimated FOV.
 - **Skip Shape Upscale** reroutes both the texture-stage shape input and decoded mesh path.
+- **Preview compatibility:** in the tested ComfyUI 0.34.0 / Frontend 1.51.10 environment, the official Advanced nodes failed because `viewport_state` was missing. They remain visible but bypassed; the standard native preview/save path runs instead.
 
 ### Requirements
 
@@ -145,7 +146,7 @@ ComfyUI公式の **Pixal3D & TRELLIS.2: Image to Model** をベースに、モ�
 - Remesh Smooth Iterations
 - Decimate Mode／Target Face Count
 - 生成・後処理の5地点にRender Mesh Previewを追加
-- Advanced Saveに加え、通常版Save GLB
+- Advanced 3D Preview／SaveをBypassで残し、動作確認環境向けの実行経路を`Render Mesh → 画像プレビュー`と通常版`Save GLB`へ変更
 
 公式ネイティブ生成Stage、4096 Texture、PBR MapのBake／Preview、Vertex Color経路、Advanced 3Dノードは公式版にも存在します。このフローでも維持していますが、追加機能としては扱いません。
 
@@ -166,6 +167,7 @@ ComfyUI公式の **Pixal3D & TRELLIS.2: Image to Model** をベースに、モ�
 - Normal Map Cage DistanceはMath Expressionから`0.02`を入力します。Primitive Floatでは小数第1位へ丸められるため、精度を保持するための意図的な構成です。
 - FOVを`0.0`にするとMoGe推定、0以外にすると手動値を使用します。
 - Skip Shape UpscaleはTexture StageとMesh Decodeの両経路を切り替えます。
+- 動作確認環境では公式Advancedノードが`viewport_state`不足で停止したため、これらをBypassし、通常の公式Preview／Saveノードへ置き換えています。
 
 ### 動作確認
 

@@ -34,7 +34,7 @@ The comparison below was made directly against the supplied official `3d_pixal3d
 | Graph | Nodes | Groups | Links |
 | --- | ---: | ---: | ---: |
 | Official template | 66 | 12 | 100 |
-| This workflow | 121 | 15 | 169 |
+| This workflow | 122 | 15 | 169 |
 
 This variant adds or changes:
 
@@ -47,7 +47,7 @@ This variant adds or changes:
 - Central controls for target face count and decimation placement mode
 - Externalized Normal Map Cage Distance at exact value `0.02`
 - Five additional `Render Mesh → Preview Image` checkpoints: sparse mesh, decoded shape, painted decoded shape, post-processed mesh, and vertex-color mesh
-- A standard `Save GLB` output in addition to the official Advanced 3D save path
+- The incompatible Advanced 3D Preview/Save nodes are retained but bypassed; active preview/export uses `Render Mesh → Preview Image` and standard `Save GLB`
 
 The following are inherited from the official template and are **not claimed as modifications**:
 
@@ -60,12 +60,42 @@ The following are inherited from the official template and are **not claimed as 
 
 No third-party generation node pack is required.
 
+## Preview compatibility path
+
+In the confirmed ComfyUI `0.34.0` / Frontend `1.51.10` environment, the Advanced 3D nodes serialized by the official template reported a missing required `viewport_state` input. This workflow therefore:
+
+1. keeps the official `Preview 3D (Advanced)` and `Save 3D (Advanced)` nodes in the graph for reference;
+2. sets those three Advanced nodes to **Bypass** so they do not block execution;
+3. uses native `Render Mesh → Preview Image` pairs for reliable 2D inspection; and
+4. uses native `Save GLB` for the active export path.
+
+This is a compatibility substitution, not a claim that a 2D render has all interactive features of Advanced 3D Preview.
+
+![Compatible final preview, GLB save path and texture maps](docs/images/final-preview-and-maps.webp)
+
+<details>
+<summary>Structure, shape and texture-stage preview checkpoints</summary>
+
+![Generation-stage render previews](docs/images/stage-previews.webp)
+
+</details>
+
+<details>
+<summary>Example GLB render (suggestive anime character)</summary>
+
+![Example generated 3D result](docs/images/example-output.webp)
+
+</details>
+
 ## Files
 
 - `workflows/native_pixal3d_trellis2_tuning.json` — the workflow
 - `examples/input-reference.jpg` — the reference image used during testing
 - `docs/images/workflow-overview.webp` — full graph overview
 - `docs/images/tuning-controls.webp` — detailed control-panel crop
+- `docs/images/final-preview-and-maps.webp` — compatible preview/save path and baked maps
+- `docs/images/stage-previews.webp` — generation-stage preview checkpoints
+- `docs/images/example-output.webp` — example generated result
 - `CIVITAI.md` — ready-to-edit Civitai listing copy and publishing checklist
 - `CHANGELOG.md` — repository changes
 
@@ -175,7 +205,7 @@ The bypass switch reroutes both the texture-stage shape input and the decoded me
 
 ### A 3D Preview node reports a missing `viewport_state`
 
-Update both ComfyUI and ComfyUI Frontend. If an older serialized Advanced Preview node remains incompatible, remove and recreate that node in the current frontend, or use the standard render previews and `Save GLB` path included in this workflow.
+The official Advanced nodes are retained in Bypass mode. Use the active `Render Mesh → Preview Image` checkpoints and `Save GLB` path included in this workflow. Updating ComfyUI/Frontend or recreating the Advanced node may restore it in another version, but that path is unconfirmed for the environment documented here.
 
 ### Missing nodes
 
